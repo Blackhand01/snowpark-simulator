@@ -1,0 +1,18 @@
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["outputs", ".local", ".tools", "target", "references", "assets"]
+
+[tool.ruff.lint]
+select = ["E4", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Preserve legacy Blender exports, object-creation side effects and sys.path
+# bootstrapping. These scripts are format-only in this refactor; host code is not.
+"scripts/*.py" = ["E401", "E402", "F401", "F841", "I001"]
+"tools/*.py" = ["E401", "E402", "F401", "F841", "I001"]
+# Numerical profile tests deliberately add the Blender-library directory first.
+"tests/test_profiles.py" = ["E402"]
+
+[tool.ruff.format]
+quote-style = "double"

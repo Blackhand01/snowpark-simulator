@@ -1,86 +1,85 @@
 # Snowpark Simulator
 
-Ambiente Blender procedurale con pista innevata, rail, atleta articolato e animazione di un boardslide sugli sci. Include strumenti per render da più camere, esportazione di pose e variazioni controllate della scena.
+Genera uno snowpark 3D in Blender e immagini sintetiche con condizioni note e ripetibili. Serve a studiare acquisizione da più camere e ricostruzione **Gaussian Splatting**: una rappresentazione 3D basata su primitive gaussiane.
 
-![Atleta e rail nello snowpark, render Cycles](docs/images/snowpark-render.png)
+Il progetto comprende terreno innevato, rail, atleta articolato e movimento sugli sci. È una scena procedurale per esperimenti visivi: il movimento è definito dalle rotazioni delle ossa, senza una simulazione fisica calibrata.
 
-## Movimento
+![Vista sintetica dello snowpark con atleta e rail](docs/images/snowpark-overview.png)
 
-Ingresso sul rail, cambio di orientamento di 180°, uscita, ricezione e scivolamento finale. Il movimento è animato tramite **cinematica diretta**: le rotazioni delle ossa determinano la posa del personaggio.
+## Avvio rapido
 
-![Animazione del boardslide, anteprima Workbench](docs/images/boardslide.gif)
-
-L'anteprima usa materiali semplificati della viewport Workbench. La sequenza completa dura circa 5 secondi; la scena animata usa 120 campioni al secondo. La GIF è esportata a 20 fotogrammi al secondo.
-
-[Sequenza di nove pose](docs/images/boardslide-sequence.jpg).
-
-## Funzionalità
-
-- Terreno tridimensionale, montagne, rail tubolare e appoggi configurabili.
-- Atleta procedurale con armatura a 22 ossa, abbigliamento, sci e accessori.
-- Animazione articolata, camera di revisione e controlli di continuità e contatto.
-- Acquisizione RGB da camere calibrate, posa congelata e separazione delle viste di addestramento e verifica.
-- Varianti di luce, esposizione, bilanciamento del bianco, neve visibile, foschia, sfocatura da movimento e occlusione.
-- Strumenti opzionali per **Gaussian Splatting**, una rappresentazione della scena mediante primitive gaussiane tridimensionali, con backend Brush.
-
-## Avvio rapido: ambiente statico
-
-Richiede **Python 3.11 o successivo** e **Blender**. La versione usata durante lo sviluppo è Blender 5.2.2 LTS su macOS Apple Silicon; altre piattaforme non sono state verificate.
+Richiede **Python ≥ 3.11** e **Blender**. Non occorrono pacchetti Python aggiuntivi per generare l'ambiente statico.
 
 ```sh
 git clone https://github.com/Blackhand01/snowpark-simulator.git
 cd snowpark-simulator
-python3 -B run.py --without-reference
+python3 -B -m snowpark_simulator scene --without-reference
 ```
 
-Questo comando genera l'ambiente statico iniziale, quattro render e una verifica del file riaperto in un secondo processo Blender. Non genera l'animazione mostrata sopra. Non richiede fotografie, modelli esterni o pacchetti Python aggiuntivi.
+Il comando costruisce l'ambiente statico iniziale, salva `snowpark.blend`, produce quattro render e riapre il file in un processo Blender separato per verificarlo. L'atleta e il movimento dell'immagine dimostrativa richiedono i workflow successivi.
 
-Ogni esecuzione crea `outputs/p1-<UTC>/`, contenente:
-
-| File | Contenuto |
-| --- | --- |
-| `snowpark.blend` | Ambiente statico navigabile |
-| `main.png`, `side.png`, `opposite.png`, `high.png` | Quattro viste della scena |
-| `build-report.json`, `verification.json` | Parametri e controlli geometrici |
-| `execution.json`, `*.log`, `source/` | Comandi, esiti e sorgenti usati |
-
-Il percorso predefinito di Blender è quello macOS. Per un'installazione diversa:
+Blender viene cercato tramite `--blender`, la variabile `SNOWPARK_BLENDER`, il `PATH`, quindi l'app macOS:
 
 ```sh
-python3 -B run.py --without-reference --blender /percorso/a/blender
+python3 -B -m snowpark_simulator scene --without-reference --blender /percorso/a/blender
+python3 -B -m snowpark_simulator --help
+python3 -B -m snowpark_simulator motion --help
 ```
 
-Per cambiare dimensioni, materiali, luce o qualità di render, copiare `config.toml` dentro il repository e passare `--config nome-config.toml`. Il tempo di rendering dipende dalla macchina e dal numero di campioni.
+Per un controllo veloce dell'installazione:
 
-## Pipeline avanzata
+```sh
+python3 -B -m snowpark_simulator scene --without-reference --config configs/scene/smoke.toml
+```
 
-| Strumento | Funzione |
+Ogni costruzione crea una nuova directory `outputs/<fase>-<UTC>/`, con scena, render, configurazione congelata, sorgenti, log e verifiche. I vecchi output non vengono sovrascritti. La navigazione interattiva in Blender è una verifica distinta da quella automatica.
+
+## Movimento dimostrativo
+
+![Anteprima del boardslide: ingresso, rotazione sul rail e uscita](docs/images/boardslide-preview.gif)
+
+Anteprima Workbench con materiali semplificati, esportata a 20 fotogrammi al secondo; il movimento dura circa cinque secondi. Mostra l'articolazione e la sequenza, non la qualità di un render finale. La scena animata e i dataset non sono inclusi nel clone.
+
+## Comandi e configurazioni
+
+| Comando | Responsabilità |
 | --- | --- |
-| `run_p2.py`, `run_refinement.py` | Confronto neve, atleta e geometria della pista |
-| `run_athlete_look.py`, `run_presentation_finish.py` | Abbigliamento e materiali |
-| `run_motion.py` | Costruzione, verifica e anteprima del movimento |
-| `run_capture.py` | Render da più camere e congelamento della posa |
-| `run_conditions.py` | Varianti controllate di rendering |
-| `run_brush.py` | Esecuzione del backend Brush locale |
-| `scripts/` | Generatori, verificatori, esportazione e analisi |
-| `configs/tricks/` | Profili sperimentali alternativi |
+| `scene` | Ambiente statico e verifica indipendente |
+| `terrain` | Morfologia della pista e contatto con il terreno |
+| `athlete` | Confronto neve e atleta statico riggato |
+| `appearance`, `presentation` | Abbigliamento, accessori e leggibilità della neve |
+| `motion` | Costruzione, controllo e anteprima del movimento |
+| `capture` | Immagini da camere calibrate, posa congelata e verifica |
+| `conditions` | Varianti controllate di luce, neve, foschia e occlusione |
+| `brush` | Backend opzionale di Gaussian Splatting |
 
-**I profili avanzati conservano percorsi e hash di input specifici di precedenti esecuzioni.** Scene `.blend`, dataset, modelli addestrati e video di riferimento non sono distribuiti nel repository. Per usare questi profili occorre fornire gli input previsti e aggiornare le relative configurazioni e impronte SHA-256. Il solo clone non riproduce l'animazione illustrata.
+Le configurazioni sono raggruppate in `configs/scene/`, `motion/`, `capture/`, `conditions/` e `tricks/`. **Quelle avanzate contengono percorsi e hash di esecuzioni storiche**: occorre fornire gli input e aggiornare i profili prima di usarle. Il clone riproduce direttamente solo la demo statica, non l'intera catena mostrata nelle immagini.
 
-I wrapper avanzati usano il percorso Blender macOS scritto nei rispettivi script. Alcuni strumenti di analisi richiedono NumPy, Pillow, Matplotlib o scikit-image; la codifica video richiede FFmpeg e FFprobe. Il backend Brush v0.3.0 è opzionale e va installato separatamente nel percorso indicato in `run_brush.py`. Non è incluso né scaricato automaticamente.
+## Struttura e sviluppo
 
-## Varianti della scena
+```text
+snowpark_simulator/   CLI, workflow e gestione delle esecuzioni
+scripts/             Generatori, librerie e verificatori eseguiti da Blender
+tools/               Analisi, valutazione e composizione delle evidenze
+configs/             Parametri della scena e degli esperimenti
+tests/               Test automatici senza Blender
+assets/              Texture e manifest di provenienza
+docs/                Architettura, guida di sviluppo e due anteprime
+outputs/             Risultati locali, esclusi da Git
+```
 
-![Confronto fra diciassette condizioni di rendering](docs/images/render-conditions.png)
+[Architettura e responsabilità](docs/architecture.md) · [Sviluppo, workflow e test](docs/development.md) · [Asset e licenze](ASSET_CREDITS.md)
 
-Le immagini sono render sintetici della stessa posa. Le sigle e i punteggi presenti nel pannello confrontano ciascun render con una ricostruzione Gaussian Splatting fissa: **PSNR** misura l'errore tra pixel in decibel, **SSIM** la similarità strutturale. Non sono una misura di qualità fisica della simulazione né una verifica su camere reali.
+```sh
+python3 -B -m unittest discover -s tests -v
+ruff check .
+ruff format --check .
+```
 
-## Limiti
+## Limiti e dipendenze opzionali
 
-Il movimento è cinematica animata; forze, attrito, tessuti e biomeccanica non sono calibrati. Neve e foschia sono effetti grafici. Le dimensioni sono parametri artistici, non un rilievo metrico. La ricostruzione Gaussian Splatting è sperimentale e può mostrare trasparenze o perdita di dettagli sull'atleta.
+Verificato nello sviluppo con Blender 5.2.2 LTS su macOS Apple Silicon; altre piattaforme richiedono una verifica specifica. Geometria, abiti, neve e movimento sono approssimazioni artistiche, senza calibrazione di forze, attrito o biomeccanica. Il personaggio resta visibilmente sintetico.
 
-Il verificatore statico controlla geometria chiusa del rail, volumi, rilievo del terreno, coordinate finite, accessibilità mediante raggi e assenza di animazione. Questi controlli non sostituiscono una validazione fisica.
+Gli strumenti in `tools/` possono richiedere NumPy, Pillow, Matplotlib e scikit-image; video e confronto temporale richiedono FFmpeg/FFprobe. Brush v0.3.0 è opzionale, separato e non scaricato automaticamente. Nessun add-on Blender è obbligatorio.
 
-## Asset
-
-Geometria e personaggio sono procedurali. Le mappe neve **Snow 01** di Rob Tuytel / Poly Haven sono CC0. Provenienza e impronte dei file sono documentate in [ASSET_CREDITS.md](ASSET_CREDITS.md) e nel [manifest delle texture](assets/polyhaven/snow_01/1k/manifest.json).
+Geometria e personaggio sono procedurali. Le texture **Snow 01**, Rob Tuytel / Poly Haven, sono CC0: [fonte e manifest](ASSET_CREDITS.md). Nessuna fotografia personale è distribuita come texture.

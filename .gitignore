@@ -1,39 +1,28 @@
-# Pubblicazione esplicita: i nuovi file nella radice restano locali.
+# Only source, documented configurations and selected public assets enter Git.
 /*
 !/.gitignore
 !/README.md
 !/ASSET_CREDITS.md
-!/run*.py
-!/config.toml
-!/animation.toml
-!/athlete_look.toml
-!/boardslide.toml
-!/boardslide_synced.toml
-!/capture*.toml
-!/cork*.toml
-!/double_cork_rail.toml
-!/p2_config.toml
-!/rail_slide.toml
-!/refine_config.toml
-!/snow_visibility.toml
-!/conditions.json
-!/reference_timing.json
-!/trick_catalog.json
+!/pyproject.toml
+!/snowpark_simulator/
 !/scripts/
+!/tools/
 !/configs/
+!/tests/
+!/.github/
 !/assets/
 !/docs/
 
-# Documentazione interna e riferimenti personali: pubblicare solo le immagini scelte.
+# Keep private references and chronological experiment reports local.
 /docs/*
 !/docs/images/
+!/docs/architecture.md
+!/docs/development.md
 /docs/images/*
-!/docs/images/snowpark-render.png
-!/docs/images/boardslide.gif
-!/docs/images/boardslide-sequence.jpg
-!/docs/images/render-conditions.png
+!/docs/images/snowpark-overview.png
+!/docs/images/boardslide-preview.gif
 
-# Cache, ambienti locali, credenziali e backup, anche nelle directory ammesse.
+# Local runs, environments, secrets and generated binaries.
 **/__pycache__/
 *.py[cod]
 .DS_Store

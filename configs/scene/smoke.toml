@@ -1,0 +1,58 @@
+# Fast integration check, not a visual-quality preset.
+[scene]
+seed = 1729
+collection = "P1_Snowpark"
+units = "METERS"
+
+[rail]
+length_m = 7.5
+radius_m = 0.56
+center_height_m = 0.43
+wall_thickness_m = 0.025
+radial_segments = 96
+metallic = 0.90
+roughness = 0.30
+scratch_count = 12
+
+[terrain]
+width_m = 70.0
+depth_m = 76.0
+grid_step_m = 1.4
+slope_y = 0.025
+berm_height_m = 0.18
+bank_y_m = 10.0
+bank_height_m = 1.65
+bank_transition_m = 1.3
+groom_spacing_m = 0.095
+groom_relief_m = 0.006
+
+[mountains]
+radius_m = 125.0
+peaks = 23
+height_min_m = 10.0
+height_max_m = 19.0
+angular_segments = 64
+radial_segments = 8
+
+[lighting]
+sun_energy = 4.0
+sun_angle_degrees = 5.0
+sun_rotation_degrees = [27.0, -22.0, -35.0]
+world_strength = 0.70
+
+[render]
+engine = "CYCLES"
+device = "CPU"
+width = 64
+height = 48
+samples = 1
+threads = 2
+denoising = true
+view_transform = "AgX"
+exposure = 0.70
+
+[preview]
+main_position = [-5.4, -9.8, 3.5]
+main_target = [-0.3, 0.8, 1.1]
+main_lens_mm = 38.0
+inspection_lens_mm = 42.0

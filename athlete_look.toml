@@ -1,0 +1,23 @@
+[source]
+blend = "outputs/refine-20261017T141754-460774Z/snowpark-refined.blend"
+sha256 = "cc79dc9212fdeee3a22f47b1772ddc1a3ebee793d67f6453a0595bd8edb5c0bb"
+
+[wardrobe]
+shirt_hem_m = 0.855
+crotch_height_m = 0.79
+trouser_cuff_m = 0.235
+fold_scale = 1.0
+visor_width_m = 0.275
+visor_height_m = 0.142
+cloth_micro_bump_m = 0.00016
+
+[render]
+comparison_size = 1280
+comparison_samples = 48
+detail_size = 1600
+detail_samples = 80
+context_width = 1920
+context_height = 1440
+context_samples = 64
+threads = 4
+seed = 1729

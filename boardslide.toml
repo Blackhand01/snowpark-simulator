@@ -1,0 +1,45 @@
+[source]
+blend = "outputs/presentation-20261017T152546-397504Z/snowpark-presentation.blend"
+sha256 = "a1901687e6e0c256a43198eb88d6482e892ee43056fa34dc99070c783e7aecff"
+reference_video = "docs/IMG_9542.mov"
+reference_sha256 = "450ca288755d1af29a99865fe53441a51a6580d1a26316206b6d8ff7188a1022"
+
+[motion]
+fps = 60
+duration_s = 5.0
+start_y_m = 8.4
+end_y_m = -12.6
+clearance_m = 0.008
+freeze_time_s = 1.9
+forward_axis = "-Y"
+up_axis = "+Z"
+interpretation = "Reference rail slide with opposite transverse poses: knees screen-left on entry, low 180 degree reorientation on rail, knees screen-right before exit, forward landing; articulated kinematics, no force simulation"
+
+[rail_slide]
+style = "boardslide"
+entry_takeoff_s = 0.8
+rail_contact_s = 1.4333333333333333
+rail_release_s = 2.65
+snow_contact_s = 3.2666666666666666
+compression_peak_s = 3.45
+recovered_s = 4.05
+gravity_m_s2 = 9.81
+slide_yaw_degrees = 90.0
+switch_start_s = 1.8
+switch_end_s = 2.3
+switch_yaw_degrees = -90.0
+switch_lift_m = 0.035
+torso_counterrotation = 0.62
+max_exit_rise_m = 0.03
+max_exit_flight_s = 0.65
+
+[render]
+width = 1280
+height = 720
+samples = 32
+threads = 4
+seed = 1729
+preview_stride = 1
+camera_offset_m = [1.8, 9.0, 3.1]
+camera_lens_mm = 42.0
+left_marker_xy_m = [1.65, 0.0]

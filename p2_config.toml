@@ -1,0 +1,22 @@
+[source]
+p1_blend = "outputs/p1-20261017T132935-933902Z/snowpark.blend"
+p1_sha256 = "59aede8da8b2019a7dc63a1399fb139bea6e21d433b167d6473adb9ec39bc1d3"
+
+[snow]
+asset = "assets/polyhaven/snow_01/1k"
+tile_m = 2.0
+color_mix = 0.22
+bump_strength = 0.55
+bump_distance_m = 0.012
+reasonable_time_ratio = 1.5
+
+[athlete]
+height_m = 1.82
+position_xy_m = [-2.0, 0.0]
+ski_length_m = 1.75
+ski_width_m = 0.115
+stance_width_m = 0.38
+ground_clearance_m = 0.015
+preview_position = [-5.0, -5.5, 2.7]
+preview_target = [-1.4, 0.0, 1.0]
+preview_lens_mm = 48.0

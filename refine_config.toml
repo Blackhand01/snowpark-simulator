@@ -1,0 +1,53 @@
+[source]
+p1_blend = "outputs/p1-20261017T132935-933902Z/snowpark.blend"
+p1_sha256 = "59aede8da8b2019a7dc63a1399fb139bea6e21d433b167d6473adb9ec39bc1d3"
+
+[terrain]
+surface_length_m = 165.0
+drop_m = 30.0
+width_m = 36.0
+grid_step_m = 0.32
+profile_max_grade = 0.228
+rail_sector_grade = 0.172
+reference_max_grade = 0.231
+cross_grade = 0.003
+ripple_m = 0.025
+thickness_m = 1.0
+
+[rail]
+length_m = 6.0
+diameter_m = 0.32
+wall_m = 0.012
+center_height_m = 0.72
+longitudinal_grade = 0.10
+support_y_m = [-2.45, 0.0, 2.45]
+radial_segments = 64
+foot_half_width_m = 0.46
+foot_half_length_m = 0.20
+
+[snow]
+asset = "assets/polyhaven/snow_01/1k"
+tile_m = 2.0
+color_mix = 0.35
+bump_strength = 0.70
+bump_distance_m = 0.012
+reasonable_time_ratio = 1.5
+
+[athlete]
+height_m = 1.82
+position_xy_m = [-2.0, 0.0]
+ski_length_m = 1.75
+ski_width_m = 0.115
+stance_width_m = 0.38
+ground_clearance_m = 0.006
+freestyle_clothes = true
+
+[render]
+seed = 1729
+width = 1280
+height = 960
+samples = 48
+threads = 4
+
+[navigation]
+geometry_ray_directions = 16

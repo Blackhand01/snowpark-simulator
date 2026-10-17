@@ -1,0 +1,28 @@
+[source]
+blend = "outputs/presentation-20261017T152546-397504Z/snowpark-presentation.blend"
+sha256 = "a1901687e6e0c256a43198eb88d6482e892ee43056fa34dc99070c783e7aecff"
+
+[motion]
+fps = 30
+duration_s = 4.0
+takeoff_s = 1.0
+flight_s = 1.4
+prepare_s = 2.0
+recover_s = 3.1
+x_m = -2.0
+start_y_m = 6.0
+end_y_m = -6.0
+height_m = 0.85
+clearance_m = 0.006
+freeze_time_s = 1.7
+discipline = "ski"
+forward_axis = "-Y"
+up_axis = "+Z"
+interpretation = "Artistic kinematics; not ballistic, motion-capture calibrated or biomechanically validated"
+
+[render]
+width = 960
+height = 720
+samples = 32
+threads = 4
+seed = 1729

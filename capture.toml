@@ -1,0 +1,17 @@
+[source]
+blend = "outputs/motion-20261017T155709-842362Z/snowpark-motion.blend"
+sha256 = "c21ebc0e742035572579da52059f71b2fe78c96cef7c04a64ce720f2e0ff2658"
+frame = 52
+
+[capture]
+views = 8
+test_camera_indices = [1, 5]
+center_m = [-0.8, 0.0, 1.1]
+radius_m = 12.0
+elevation_degrees = 20.0
+lens_mm = 45.0
+width = 640
+height = 480
+samples = 24
+threads = 4
+seed = 1729

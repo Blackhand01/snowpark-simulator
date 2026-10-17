@@ -1,0 +1,18 @@
+[source]
+blend = "outputs/boardslide-synced-20261017T182924-532391Z/snowpark-motion.blend"
+sha256 = "a8d42cad61740dc8e963b3f0d3bcb241149effe9db80a1014b742bf5dd32cccb"
+frame = 203
+
+[capture]
+views = 32
+test_camera_indices = [4, 20]
+reuse_dataset = "outputs/capture-20261017T195705-380713Z"
+center_m = [-0.8, 0.0, 1.1]
+radius_m = 12.0
+elevation_degrees = 20.0
+lens_mm = 45.0
+width = 640
+height = 480
+samples = 24
+threads = 4
+seed = 1729

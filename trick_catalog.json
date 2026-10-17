@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "discipline": "ski",
+  "classification": "Artistically defined demo conventions; not universal sports terminology or physical validation",
+  "entries": [
+    {
+      "id": "frontside_cork-360",
+      "config": "configs/tricks/frontside_cork-360.toml",
+      "family": "frontside_cork",
+      "rotation_degrees": 360,
+      "direction": 1
+    },
+    {
+      "id": "backside_cork-360",
+      "config": "configs/tricks/backside_cork-360.toml",
+      "family": "backside_cork",
+      "rotation_degrees": 360,
+      "direction": -1
+    },
+    {
+      "id": "frontside_cork-540",
+      "config": "configs/tricks/frontside_cork-540.toml",
+      "family": "frontside_cork",
+      "rotation_degrees": 540,
+      "direction": 1
+    },
+    {
+      "id": "backside_cork-540",
+      "config": "configs/tricks/backside_cork-540.toml",
+      "family": "backside_cork",
+      "rotation_degrees": 540,
+      "direction": -1
+    },
+    {
+      "id": "frontside_cork-720",
+      "config": "configs/tricks/frontside_cork-720.toml",
+      "family": "frontside_cork",
+      "rotation_degrees": 720,
+      "direction": 1
+    },
+    {
+      "id": "backside_cork-720",
+      "config": "configs/tricks/backside_cork-720.toml",
+      "family": "backside_cork",
+      "rotation_degrees": 720,
+      "direction": -1
+    },
+    {
+      "id": "rail_to_cork-360",
+      "config": "configs/tricks/rail_to_cork-360.toml",
+      "family": "rail_to_cork",
+      "rotation_degrees": 360,
+      "direction": 1
+    },
+    {
+      "id": "double_cork_experimental-720",
+      "config": "configs/tricks/double_cork_experimental-720.toml",
+      "family": "double_cork_experimental",
+      "rotation_degrees": 720,
+      "direction": 1
+    },
+    {
+      "id": "triple_cork_experimental-1080",
+      "config": "configs/tricks/triple_cork_experimental-1080.toml",
+      "family": "triple_cork_experimental",
+      "rotation_degrees": 1080,
+      "direction": 1
+    }
+  ]
+}

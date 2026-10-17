@@ -1,0 +1,17 @@
+[source]
+blend = "outputs/athlete-look-20261017T145741-390532Z/snowpark-tailored-athlete.blend"
+sha256 = "da82279375b6194b41a7d29dc3fb99477e53510dfc9d3a3281286e305e4c2321"
+render_records = "outputs/athlete-look-20261017T145741-390532Z/presentation-renders.json"
+render_directory = "outputs/athlete-look-20261017T145741-390532Z"
+
+[snow]
+pbr_bump_strength = 0.35
+pbr_bump_distance_m = 0.003
+corduroy_strength = 0.90
+corduroy_distance_m = 0.006
+normal_order = "grain -> PBR -> corduroy"
+
+[viewport]
+shading = "MATERIAL"
+distance_m = 12.0
+overlays = false

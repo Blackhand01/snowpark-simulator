@@ -1,0 +1,42 @@
+[source]
+blend = "outputs/presentation-20261017T152546-397504Z/snowpark-presentation.blend"
+sha256 = "a1901687e6e0c256a43198eb88d6482e892ee43056fa34dc99070c783e7aecff"
+
+[motion]
+fps = 30
+duration_s = 5.2
+takeoff_s = 1.0
+flight_s = 2.4
+prepare_s = 2.9
+recover_s = 4.3
+x_m = -3.5
+start_y_m = 7.0
+end_y_m = -8.6
+height_m = 2.6
+clearance_m = 0.012
+freeze_time_s = 2.2
+discipline = "ski"
+forward_axis = "-Y"
+up_axis = "+Z"
+interpretation = "Experimental artistic cork kinematics; no motion-capture, physical or biomechanical validation"
+
+[trick]
+family = "single_cork"
+rotation_degrees = 360
+direction = 1
+axis_tilt_degrees = 50.0
+axis_azimuth_degrees = 0.0
+compact_crouch_m = 0.20
+pivot_height_m = 0.95
+discipline = "ski"
+entry_direction = "world -Y"
+reference_orientation = "local +Z up, -Y forward; positive yaw CCW viewed from above"
+direction_convention = "Mathematical sign only; frontside/backside not asserted for skiing"
+exit_pose = "upright; 360/720 forward, 540 switch"
+
+[render]
+width = 960
+height = 720
+samples = 32
+threads = 4
+seed = 1729

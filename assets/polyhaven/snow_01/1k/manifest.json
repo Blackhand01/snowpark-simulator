@@ -1,0 +1,35 @@
+{
+  "name": "Snow 01",
+  "author": "Rob Tuytel",
+  "page": "https://polyhaven.com/a/snow_01",
+  "license": "CC0",
+  "license_source": "https://polyhaven.com/license",
+  "attribution_required": false,
+  "verified_date": "2026-10-17",
+  "files": [
+    {
+      "file": "snow_01_bump_1k.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 872667,
+      "sha256": "38f8678a2721e09ee31133c61c537fb192dbb629961215044af64444f467bb3d",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/snow_01/snow_01_bump_1k.png"
+    },
+    {
+      "file": "snow_01_diff_1k.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1436607,
+      "sha256": "2025cb28eec7b5b8b153239364fcd73a7056ee295c8888be77874e94fed76ddf",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/snow_01/snow_01_diff_1k.png"
+    },
+    {
+      "file": "snow_01_rough_1k.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 517458,
+      "sha256": "66f6cb5ad767a3088e289c60eb73c0ce564be6c965191f5589ff3cf69c1cab12",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Textures/png/1k/snow_01/snow_01_rough_1k.png"
+    }
+  ]
+}

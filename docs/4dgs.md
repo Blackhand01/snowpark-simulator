@@ -1,4 +1,4 @@
-# A bounded 4D Gaussian Splatting pilot
+# 4D Gaussian Splatting: experiment status and viewing
 
 The pilot asks whether one time-conditioned Gaussian model reconstructs the
 athlete's rail reorientation at unseen camera angles and intermediate times.
@@ -15,7 +15,8 @@ it cannot recreate this exact pilot without that approved input artifact.
 The capture covers scene time 0.9–1.9 s, frames 109–229 at 120 fps, sampled at
 30 Hz. Sixteen fixed cameras on two elevation rings produce 496 RGB images at
 640×480, with an evaluation-only visible-athlete mask from the same Cycles render.
-Capture preserves the full animation and never rebuilds terrain, rail or clothing.
+Capture leaves the source animation intact but exports only that one-second
+window. It never rebuilds terrain, rail or clothing.
 
 | Partition | Images | Role |
 | --- | --- | --- |
@@ -199,3 +200,127 @@ SHA-256: `1343ed2fa933535c706f59d76c96f3bee5b2152ba673330f7f846a2d97a2a1fb`.
 Raw datasets, checkpoints and failed attempts remain local and excluded from Git.
 The approved source scene and input archive retained their original content hashes.
 Further training or protocol changes require a separate decision.
+
+## Exported pilot animation
+
+The evaluated dynamic checkpoint was exported without training into 31 numbered
+PLY frames (17,507 Gaussians/frame; 134,641,246 bytes total). Six reload/render
+comparisons matched the original backend exactly. Frame and checkpoint hashes
+passed. SuperSplat 3.5.2 recognized the sequence and its 31-frame timeline, but
+playback and navigation of the skier have not yet been validated interactively.
+
+The export, integrity evidence and screenshots are in
+`outputs/4dgs-ply-20261018T113620-018590Z/REPORT.md`. Reproduction uses
+`python tools/export_4dgs.py --help` inside the existing backend CUDA environment;
+the report and `cloud-export/execution.json` retain the executed command. The Mac
+only needs a compatible viewer for these baked files, not the training backend.
+
+[SuperSplat](https://developer.playcanvas.com/user-manual/supersplat/editor/import-export/)
+remains an alternative for PLY-sequence inspection, with full-scene loading per
+frame. Single-scene PLY support or a camera-path timeline in another viewer does
+not establish support for an animated scene.
+
+## Optional local viewer: Chronosplat
+
+On 18 October 2026, the existing [Chronosplat](https://github.com/tcwilsonart/Chronosplat)
+1.0.0 player (revision `2278aa9321d46e3d99f4a8174d37e676be91e5e0`) was built
+without player-source changes and served only on localhost. No custom viewer,
+paid service, public model upload or new training was used. Its official
+SplatTransform 3.1.7 converter used the Apple M1 GPU; original PLY hashes remained
+unchanged.
+
+| Check | Observed result |
+| --- | --- |
+| Frame and Gaussian count | All 31 frames and 17,507 Gaussians/frame retained; degree-3 view-dependent color retained |
+| Compression | PLY 134,641,246 bytes → SOG 22,181,056 bytes, approximately 6.07× smaller |
+| Conversion | 148.16 s on Apple M1; one frame converted at a time |
+| Playback | Approximately 22–24 effective fps against a 30-fps target; every-frame mode; five timeline wraps observed |
+| Memory strategy | All 31 compressed frames cached for this short clip; zero failed loads in observed UI states |
+| Memory verification | No out-of-memory failure observed; player-only unified/GPU memory was not isolated |
+| Camera gestures | User manually confirmed orbit, zoom and pan while paused on 18 October 2026; the automated gesture checks remained interrupted |
+| Reconstruction quality | Existing blur, incomplete athlete and novel-view artifacts remain |
+
+SOG compresses each frame; it is not an inter-frame video codec. A six-frame cache
+showed stalls and roughly 5–9 fps in sampled readings. Full caching improved this
+short clip's usability but does **not** establish memory-bounded playback of a
+longer sequence. No 30-fps or long-duration memory pass is claimed.
+
+### Open the existing local run
+
+From this repository root, restart the already built player if needed:
+
+```sh
+./outputs/4dgs-player-20261018T125220-542663Z/start-player.command
+```
+
+Then open this URL in Chrome:
+
+<http://127.0.0.1:8765/?seq=snowpark-gpu&ahead=30&behind=0&concurrency=4&prebuffer=31&maxPixelRatio=1&paused=1&stats=1>
+
+Play/Pause or Space controls time; the timeline seeks through the sequence.
+The upstream controls provide left-drag orbit, right-drag pan and wheel zoom.
+Pause leaves the camera available for bullet-time inspection. The user confirmed
+that paused orbit, zoom and pan work. Reset restores the initial view; explicit
+timeline-seeking verification remains open. `maxPixelRatio=1` reduces Retina
+rendering cost without changing the model.
+The presentation manifest uses the source scene's Z-up axis.
+
+The helper serves `chronosplat/dist/` on `127.0.0.1` only; keep the server running
+while viewing. It uses Python's standard file server and requires neither a new
+conversion nor a training backend. The initial optional setup used Node ≥22,
+Python/NumPy, `npm ci` from the upstream lockfile and `npm run build`. This local
+run and its sequence are excluded from Git; a fresh repository clone does not
+include the player installation or private model outputs.
+
+See `outputs/4dgs-player-20261018T125220-542663Z/REPORT.md` for measurements,
+compression comparisons, source pin and limitations. The three same-renderer
+PLY/SOG pairs scored 49.28–51.86 dB PSNR; those global-image comparisons assess
+compression, not athlete reconstruction quality. Reports retain source hashes,
+commands, screenshots and OS memory samples. Historical output directories remain
+unchanged.
+
+## Next training requirement: complete 5.02-second action
+
+**Requested on 18 October 2026; not captured or trained yet.** The next experiment
+must reconstruct the full approved animated scene, including the athlete, skis,
+rail and surrounding snowpark throughout the action. The source configuration
+[`boardslide-synced.toml`](../configs/motion/boardslide-synced.toml) declares
+5.02 seconds at 120 fps. The frozen local `build-report.json` records 5.02 seconds,
+and the preview timing manifest records 3,012 ticks at 600 ticks/s, also 5.02 s.
+These describe the approved synthetic animation, not measured physical dynamics.
+
+| Required phase | Source-scene timing |
+| --- | --- |
+| Approach and entry takeoff | Start at 0 s; takeoff at 0.685 s |
+| First rail contact | Approximately 0.918 s |
+| Slide and reorientation | Contact through rail release at 2.085 s |
+| Exit flight and landing | Snow contact at approximately 2.518 s |
+| Recovery and run-out | Recovered at 3.02 s; continue through the 5.02-s scene end |
+
+The current [`4dgs-pilot.json`](../configs/capture/4dgs-pilot.json) samples only
+0.9–1.9 s, frames 109–229. Its 31 exported PLYs contain exactly the time window
+that was captured and fitted. The proper approach, release, landing and run-out
+are absent from that dataset. More exported frames or a longer playback timeline
+cannot recover those missing observations from this checkpoint.
+
+Requirements for the next separately versioned protocol:
+
+- Capture the full 0–5.02-s source action with timestamp/frame provenance;
+  include the actual first and last states, with the sampling/end-point rule
+  declared explicitly. At approximately 30 Hz this is roughly 151–152 timestamps,
+  not the present 31; the exact count depends on the chosen time grid.
+- Check calibrated multi-camera coverage over the complete trajectory, including
+  approach and run-out. Revisit the existing rail-centered framing so the athlete
+  and equipment remain supported by sufficient views throughout the scene.
+- Define fresh training, validation and held-out camera/time splits across all
+  phases. Normalize time over the new complete interval and record the mapping;
+  do not reuse the one-second interval's normalization.
+- Reassess capture, fitting, storage and Mac playback budgets. Extending duration
+  does not by itself resolve the failed pilot's athlete/novel-view quality.
+- Evaluate and export the whole sequence; check the first, contact, release,
+  landing and last frames, held-out views, temporal artifacts and paused-camera
+  navigation. Preserve all current models, frames and viewer outputs as baselines.
+
+This records the required scope for the next training. The historical one-second
+profile remains unchanged for reproducibility; no capture, notebook execution or
+training is started by this documentation update.

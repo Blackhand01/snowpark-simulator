@@ -40,6 +40,28 @@ Each build creates a new `outputs/<stage>-<UTC>/` directory containing the scene
 
 Workbench preview with simplified materials, exported at 20 frames per second; the movement lasts approximately five seconds. It shows articulation and timing rather than final render quality. The animated scene and datasets are not included in the clone.
 
+## 4D reconstruction status and viewing
+
+The first Colab Free 4D Gaussian Splatting (4DGS) pilot completed training but
+**failed reconstruction-quality targets**. It covers only **0.9–1.9 seconds** of
+the approved **5.02-second** animation. The Blender previews above show the source
+scene; reconstruction results and limitations are documented in the
+[4DGS experiment guide](docs/4dgs.md).
+
+**Optional viewer: [Chronosplat](https://github.com/tcwilsonart/Chronosplat).** The
+existing player replayed our 31 frames locally on an Apple M1 Mac with 8 GiB RAM.
+SOG compression reduced the sequence from 134.6 MB to 22.2 MB; sampled playback
+reached approximately 22–24 fps with this short clip fully cached. The user
+confirmed orbit, zoom and pan while paused; isolated player-memory measurement
+remains incomplete. See
+[local playback, controls and restart instructions](docs/4dgs.md#optional-local-viewer-chronosplat).
+
+**Next training requirement, not started:** reconstruct the complete animated
+scene over **0–5.02 seconds**, including approach, rail interaction, landing and
+run-out, with the surrounding snowpark visible. This requires a new full-duration
+capture and training protocol; the current one-second model cannot supply the
+missing action. See the [required temporal coverage](docs/4dgs.md#next-training-requirement-complete-502-second-action).
+
 ## Commands and configuration
 
 | Command | Responsibility |
@@ -71,13 +93,10 @@ outputs/             Local results, excluded from Git
 
 [Architecture and responsibilities](docs/architecture.md) · [Development, workflows, and tests](docs/development.md) · [Assets and licenses](ASSET_CREDITS.md)
 
-For the bounded dynamic reconstruction experiment, see the
-[4DGS pilot protocol](docs/4dgs.md) and [Colab Free notebook](notebooks/4dgs_colab.ipynb).
-It requires the approved local animated scene and a separately verified synthetic
-dataset. GPU availability, successful fitting and visual quality are separate checks;
-the included research backend is not cleared for commercial use.
-The first Free T4 pilot completed both fits but failed reconstruction-quality
-targets; see the [measured results and limitations](docs/4dgs.md#observed-free-t4-pilot-18-october-2026).
+The [Colab Free notebook](notebooks/4dgs_colab.ipynb) requires the approved local
+animated scene and a separately verified dataset. GPU availability, successful
+fitting and visual quality are separate checks; the included research backend is
+not cleared for commercial use.
 
 ```sh
 python3 -B -m unittest discover -s tests -v

@@ -4,8 +4,10 @@ import copy
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 from snowpark_simulator.pilot4d import group, source_frame, validate_records, write_json
+from tools.colab_4dgs import initial_stamp_cameras
 
 
 class PilotContractTests(unittest.TestCase):
@@ -91,6 +93,22 @@ class PilotContractTests(unittest.TestCase):
             with self.assertRaises(FileExistsError):
                 write_json(path, {"value": 2})
             self.assertIn('"value": 1', path.read_text())
+
+
+class InitialStampCameraTests(unittest.TestCase):
+    def test_plain_camera_list_keeps_all_initial_views_in_order(self):
+        cameras = [SimpleNamespace(time=t) for t in (0.5, 0.0, 1.0, 0.0)]
+        selected = initial_stamp_cameras(cameras)
+        self.assertEqual(selected, [cameras[1], cameras[3]])
+        self.assertIs(selected[0], cameras[1])
+
+    def test_small_timestamp_roundoff_is_accepted(self):
+        cameras = [SimpleNamespace(time=t) for t in (1e-10, -1e-10, 1 / 30)]
+        self.assertEqual(initial_stamp_cameras(cameras), cameras[:2])
+
+    def test_missing_initial_time_stops_instead_of_changing_initialization(self):
+        with self.assertRaises(ValueError):
+            initial_stamp_cameras([SimpleNamespace(time=0.5)])
 
 
 if __name__ == "__main__":

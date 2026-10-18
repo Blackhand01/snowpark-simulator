@@ -48,6 +48,14 @@ def replace_exact(text, original, replacement, count):
     return text.replace(original, replacement)
 
 
+def initial_stamp_cameras(cameras):
+    """Keep every view at time zero without assuming a dataset wrapper or stride."""
+    selected = [camera for camera in cameras if abs(float(camera.time)) <= 1e-8]
+    if not selected:
+        raise ValueError("Zero-stamp initialization requires training cameras at time zero")
+    return selected
+
+
 def adapt(backend, output):
     revision = subprocess.check_output(
         ["git", "-C", str(backend), "rev-parse", "HEAD"], text=True
@@ -96,6 +104,9 @@ def adapt(backend, output):
     changes[str(path.relative_to(backend))] = (original, text)
     # A small original helper, not copied from the unlicensed component.
     (backend / "pilot_knn.py").write_text(inspect.getsource(nearest_three_squared) + "\n")
+    (backend / "pilot_camera_selection.py").write_text(
+        inspect.getsource(initial_stamp_cameras) + "\n"
+    )
     path = backend / "train.py"
     original = path.read_text()
     guard = """        if iteration % 50 == 0:
@@ -111,6 +122,13 @@ def adapt(backend, output):
                 raise RuntimeError("PILOT_RESOURCE_LIMIT")
         iter_start.record()"""
     text = replace_exact(original, "        iter_start.record()", guard, 1)
+    text = replace_exact(
+        text,
+        "        temp_list = get_stamp_list(viewpoint_stack,0)",
+        "        from pilot_camera_selection import initial_stamp_cameras\n"
+        "        temp_list = initial_stamp_cameras(viewpoint_stack)",
+        1,
+    )
     text = replace_exact(
         text, "    safe_state(args.quiet)", "    safe_state(args.quiet)\n    setup_seed(1729)", 1
     )
@@ -130,8 +148,9 @@ def adapt(backend, output):
             backend_revision=revision,
             changed_files=list(changes),
             helper_sha256=sha(backend / "pilot_knn.py"),
+            initial_stamp_helper_sha256=sha(backend / "pilot_camera_selection.py"),
             simple_knn_used=False,
-            scope="loader calibration, native size, declared cameras, native Torch initialization, seed and resource records",
+            scope="loader calibration, native size, declared cameras, native Torch initialization, time-zero camera selection, seed and resource records",
         ),
     )
 
@@ -243,7 +262,8 @@ def model_probe(backend, data, output):
     for step in range(100):
         cam = train[step % len(train)]
         predicted = render(cam, model, pp.extract(args), background, stage="fine")["render"]
-        loss = (predicted - cam.original_image[:3]).abs().mean()
+        reference = cam.original_image[:3].to(predicted.device)
+        loss = (predicted - reference).abs().mean()
         loss.backward()
         assert torch.isfinite(loss) and torch.isfinite(model._xyz.grad).all()
         if step == 0:

@@ -97,6 +97,11 @@ synthetic loader otherwise forces 800×800 and assumes square dimensions. The
 adapter preserves native resolution, fixes width/height and camera conversion,
 uses declared views instead of a demo orbit, and records seeds/resources.
 Camera matrices loaded on CUDA must agree with neutral calibration within 0.5 px.
+Coarse initialization selects every camera whose normalized time is zero. The
+upstream selector assumes a DyNeRF dataset wrapper and cannot handle the Blender
+camera list. The adapter preserves zero-time initialization without relying on
+camera ordering or an inferred dataset stride. The diagnostic loss explicitly
+moves reference pixels onto the prediction's device before comparison.
 
 `transforms_test.json` under the fitting directory contains **validation** views.
 Final-test views enter a separate loader only after both models finish. Upstream
@@ -141,3 +146,56 @@ Download the result archive before leaving Colab. Checkpoints, configuration,
 adapter patch, software records, timings, memory logs, predictions and metrics
 must be preserved in a new local output directory. Public notebooks have empty
 outputs; actual run evidence belongs in local `outputs/`.
+
+## Observed Free T4 pilot: 18 October 2026
+
+**Execution completed; reconstruction quality failed the declared acceptance criteria.**
+The actual 496-image input passed archive/file hashes and camera checks. An isolated
+Python 3.10.22 / PyTorch 1.13.1+cu117 environment and CUDA 11.8 compiler built the
+pinned rasterizer on a Tesla T4 (15,360 MiB). The actual-data diagnostic completed
+100 render/backpropagation steps; maximum camera reprojection error was 0.000020 px.
+No paid runtime, subscription or compute-unit purchase was used.
+
+| Model | Training time | Final Gaussians | Peak allocated CUDA memory |
+| --- | ---: | ---: | ---: |
+| Static control | 154.55 s | 16,636 | 137.1 MiB |
+| Dynamic | 183.22 s | 17,507 | 204.8 MiB |
+
+Both completed 500 coarse + 4,500 fine steps from the same random initialization.
+Separate evaluation processes scored 134 final images per model. The static
+control passed fixed-camera pixel invariance across time.
+
+| Final group | Static athlete ROI PSNR | Dynamic athlete ROI PSNR | Dynamic ROI SSIM | Dynamic frames ≥20 dB |
+| --- | ---: | ---: | ---: | ---: |
+| New cameras | 12.88 dB | 12.96 dB | 0.631 | 0% |
+| New times | 13.78 dB | 18.84 dB | 0.739 | 37.5% |
+
+Only 2 of 11 predeclared checks passed. Temporal residual error improved by 1.50%,
+below the required 25%; new-camera background PSNR also lost 2.10 dB. The temporal
+gain alone does not establish a usable moving reconstruction. Neither the budget
+nor the thresholds were adjusted after observing the test results. This run
+establishes Free T4 feasibility for the bounded protocol, not acceptable novel-view
+quality or suitability for presentation/sponsor use.
+
+Two compatibility failures were retained: the diagnostic originally mixed CPU and
+CUDA images, and the upstream coarse selector expected a DyNeRF wrapper. The fixes
+above changed no data, splits or fitting parameters. A fresh adaptation of pristine
+pinned sources reproduced the effective backend files byte for byte; 39 local
+tests passed. The failed static attempt stopped before its first optimization step.
+
+Visual review rejected all eight sampled new-camera dynamic comparisons (two
+cameras, four times): severe transparency, missing equipment, weak rail detail and
+colored floaters. Two held-out-time comparisons from training cameras showed a
+blurred, incomplete athlete even where the rail was better reconstructed. Four
+comparison videos decoded successfully; continuous playback was not visually
+reviewed. These observations support the negative metric result, without isolating
+its cause.
+
+Local evidence is retained in `outputs/4dgs-pilot-20261018T101121-285573Z/`:
+`REPORT.md`, `comparison.json`, integrity checks, source snapshots and extracted
+`cloud-results/`. The 445,752,901-byte cloud archive passed SHA-256 and all ZIP CRC
+checks (389 entries); final model hashes match the evaluation records. Archive
+SHA-256: `1343ed2fa933535c706f59d76c96f3bee5b2152ba673330f7f846a2d97a2a1fb`.
+Raw datasets, checkpoints and failed attempts remain local and excluded from Git.
+The approved source scene and input archive retained their original content hashes.
+Further training or protocol changes require a separate decision.

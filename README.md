@@ -76,6 +76,8 @@ For the bounded dynamic reconstruction experiment, see the
 It requires the approved local animated scene and a separately verified synthetic
 dataset. GPU availability, successful fitting and visual quality are separate checks;
 the included research backend is not cleared for commercial use.
+The first Free T4 pilot completed both fits but failed reconstruction-quality
+targets; see the [measured results and limitations](docs/4dgs.md#observed-free-t4-pilot-18-october-2026).
 
 ```sh
 python3 -B -m unittest discover -s tests -v

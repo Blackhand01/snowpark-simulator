@@ -28,20 +28,20 @@ def main():
     font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 24)
     small = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 17)
     for i, (im, label) in enumerate(
-        zip(images, ["PRIMA / PBR dominante", "DOPO / striature ripristinate"])
+        zip(images, ["BEFORE / dominant PBR", "AFTER / restored grooming grooves"])
     ):
         x = i * 800
         draw.text((x + 16, 12), label, font=font, fill="#172432")
         draw.text(
             (x + 16, 44),
-            "Camera, luce e impostazioni identiche",
+            "Identical camera, lighting and settings",
             font=small,
             fill="#43556a",
         )
         panel.paste(im.resize((800, 600), Image.Resampling.LANCZOS), (x, 70))
         draw.text(
             (x + 16, 686),
-            "Dettaglio identico del primo piano / pixel originali",
+            "Same foreground crop / original pixels",
             font=small,
             fill="#43556a",
         )

@@ -1,37 +1,37 @@
-# Sviluppo e workflow
+# Development and workflows
 
-Eseguire i comandi dalla radice del repository. Python ≥ 3.11; nessuna dipendenza Python aggiuntiva per i workflow host. Blender rimane un eseguibile esterno.
+Run commands from the repository root. Python ≥ 3.11; host workflows require no additional Python dependencies. Blender remains an external executable.
 
-## Configurazioni
+## Configuration
 
-| Directory | Contenuto |
+| Directory | Contents |
 | --- | --- |
-| `configs/scene/` | `static` e `smoke` per un clone nuovo; `athlete`, `terrain`, `appearance`, `presentation` per gli stadi successivi |
-| `configs/motion/` | Salto, rail slide, boardslide, sincronizzazione video e relativi timestamp |
-| `configs/capture/` | Posa e acquisizioni boardslide a 8 o 32 camere |
-| `configs/conditions/` | Matrice delle variazioni grafiche |
-| `configs/tricks/` | Catalogo e profili sperimentali di rotazione |
+| `configs/scene/` | `static` and `smoke` for a fresh clone; `athlete`, `terrain`, `appearance`, and `presentation` for subsequent stages |
+| `configs/motion/` | Jump, rail slide, boardslide, video synchronization, and reference timestamps |
+| `configs/capture/` | Frozen-pose acquisitions with 8 or 32 cameras; the 16-camera temporal 4DGS pilot |
+| `configs/conditions/` | Matrix of visual variations |
+| `configs/tricks/` | Catalog and experimental rotation profiles |
 
-Le distanze sono in metri, i tempi in secondi; i campi `*_degrees` sono in gradi. Nei profili raffinati Z è verticale e la discesa segue −Y. Le impostazioni complete dipendono dal profilo: non attribuire alla configurazione iniziale le dimensioni dei refinement successivi.
+Distances are in meters and times in seconds; fields ending in `*_degrees` use degrees. In refined profiles, Z is vertical and downhill follows −Y. Complete settings depend on the profile: do not assume the initial configuration has the dimensions of later refinements.
 
-I profili avanzati sono esempi storici collegati a file locali non distribuiti. Prima di costruire una variante: fornire il `.blend`, impostare il percorso relativo al repository e il suo SHA-256, aggiornare eventuali manifest e input video. Non rimuovere il controllo dell'hash per far passare un input diverso.
+Advanced profiles are historical examples linked to local files that are not distributed. Before building a variant, supply the `.blend`, set its repository-relative path and SHA-256 hash, and update any required manifests and video inputs. Do not remove the hash check to accept a different input.
 
-## Comandi
+## Commands
 
-Il solo punto d'ingresso è `python3 -B -m snowpark_simulator`. I precedenti `run_*.py` sono sostituiti dai comandi seguenti; non sono mantenute copie parallele della stessa implementazione.
+The sole entry point is `python3 -B -m snowpark_simulator`. The following commands replace the previous `run_*.py` files; parallel copies of the same implementation are not maintained.
 
 ```sh
 python3 -B -m snowpark_simulator scene --without-reference
 python3 -B -m snowpark_simulator motion build --config configs/motion/boardslide-synced.toml
-python3 -B -m snowpark_simulator motion verify --output outputs/NOME_RUN
+python3 -B -m snowpark_simulator motion verify --output outputs/RUN_NAME
 python3 -B -m snowpark_simulator capture capture --config configs/capture/boardslide-32.toml
-python3 -B -m snowpark_simulator capture freeze --output outputs/NOME_RUN
-python3 -B -m snowpark_simulator capture verify --output outputs/NOME_RUN
+python3 -B -m snowpark_simulator capture freeze --output outputs/RUN_NAME
+python3 -B -m snowpark_simulator capture verify --output outputs/RUN_NAME
 ```
 
-Questi sono esempi di invocazione: non eseguono automaticamente tutta la pipeline. Consultare `COMMAND --help` prima di ogni workflow. Il confronto neve richiede una scelta esplicita con `--snow` e `--reason`; il termine di un render non seleziona da solo un materiale.
+These are invocation examples: they do not automatically execute the entire pipeline. Consult `COMMAND --help` before each workflow. Snow comparison requires an explicit selection through `--snow` and `--reason`; completing a render does not select a material automatically.
 
-Gli strumenti di analisi restano comandi autonomi, ad esempio:
+Analysis tools remain standalone commands, for example:
 
 ```sh
 python3 -B tools/check_catalog.py --output .local/catalog-check.json
@@ -39,9 +39,9 @@ python3 -B tools/encode_preview.py --help
 python3 -B tools/prepare_brush_dataset.py --help
 ```
 
-Le composizioni PNG in `tools/*_evidence.py` usano render reali e dichiarano ridimensionamenti o ritagli. Non devono trasformarsi in ritocco delle evidenze. I preset cork storici esterni al catalogo e i controlli ad hoc superati non fanno più parte del codice attivo.
+PNG compositions produced by `tools/*_evidence.py` use actual renders and disclose resizing or cropping. They must not retouch the evidence. Historical cork presets outside the catalog and superseded ad hoc checks are no longer part of the active code.
 
-## Test e stile
+## Tests and style
 
 ```sh
 python3 -B -m unittest discover -s tests -v
@@ -49,16 +49,16 @@ ruff check .
 ruff format --check .
 ```
 
-L’integrazione continua (CI) è configurata per i controlli host con Python 3.11 e 3.13, senza Blender, asset privati o backend. Le azioni sono fissate a commit ufficiali; definire il workflow non equivale a eseguirlo su GitHub. Ruff è uno strumento di sviluppo, non una dipendenza della scena. Per un controllo reale di Blender usare il profilo `smoke.toml`: quattro piccoli render e verifica indipendente del `.blend` riaperto. `tests/blender_imports.py`, eseguito esplicitamente tramite Blender, controlla inoltre gli import delle librerie riordinate senza creare oggetti. Queste non sono prove di navigazione GUI o qualità estetica.
+Continuous integration (CI) is configured for host checks on Python 3.11 and 3.13, without Blender, private assets, or a reconstruction backend. Actions are pinned to official commits; defining a workflow does not establish that it passed on GitHub. Ruff is a development tool, not a scene dependency. For a real Blender check, use `smoke.toml`: four small renders followed by independent verification of the reopened `.blend`. Running `tests/blender_imports.py` explicitly through Blender also checks imports of the reorganized libraries without creating objects. These checks do not establish GUI navigation or visual quality.
 
-Mantenere i calcoli in funzioni prive di accesso al filesystem quando possibile. Aggiungere test per invarianti osservabili: continuità, direzione della pendenza, isolamento degli output e propagazione degli errori. Evitare test che copiano semplicemente le formule dell'implementazione.
+Keep calculations in functions without filesystem access where possible. Add tests for observable invariants: continuity, downhill direction, output isolation, and error propagation. Avoid tests that merely repeat implementation formulas.
 
-Non importare `bpy` nei workflow host. Non avviare processi all'importazione. Per nuove operazioni usare `blender_command`, `run_logged`, `within` e `new_run`; per i controlli degli input usare eccezioni esplicite, non `assert`, che Python può disattivare con `-O`.
+Do not import `bpy` in host workflows or start processes at import time. Use `blender_command`, `run_logged`, `within`, and `new_run` for new operations. Validate inputs with explicit exceptions rather than `assert`, which Python can disable with `-O`.
 
-I generatori Blender storici mantengono alcuni assert interni, import di compatibilità e assegnazioni con effetti di creazione oggetti. Il refactor ne conserva il comportamento; le eccezioni di lint sono circoscritte a questi file. Una modifica algoritmica richiede una verifica specifica della scena, oltre ai test host.
+Legacy Blender generators retain some internal assertions, compatibility imports, and assignments with object-creation side effects. The refactor preserves their behavior; lint exceptions are limited to those files. Algorithm changes require scene-specific verification in addition to host tests.
 
-## File locali e immagini pubbliche
+## Local files and public images
 
-`outputs/`, `.tools/`, riferimenti personali e `.local/` sono esclusi da Git. I report cronologici, tre preset storici e due vecchie immagini del README sono conservati localmente sotto `.local/refactor-archive/`, con mappa degli spostamenti. Le scene validate non vengono eliminate dalla pulizia del codice.
+`outputs/`, `.tools/`, personal references, and `.local/` are excluded from Git. Chronological reports, three historical presets, and two former README images are preserved locally under `.local/refactor-archive/`, with a migration map. Repository cleanup does not delete validated scenes.
 
-Il README pubblica due immagini: panoramica della scena e anteprima del movimento. Il mosaico dei risultati e la sequenza statica di pose non vengono duplicati nella presentazione del progetto. Nessuna cancellazione riscrive la storia Git: alleggerire i commit già pubblicati richiederebbe un'operazione separata.
+The README displays two images: a scene overview and a motion preview. The results montage and static pose sequence are not duplicated in the project presentation. Deleting files does not rewrite Git history: reducing the size of previously published commits would require a separate operation.

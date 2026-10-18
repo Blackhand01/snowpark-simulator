@@ -9,6 +9,7 @@
 !/tools/
 !/configs/
 !/tests/
+!/notebooks/
 !/.github/
 !/assets/
 !/docs/
@@ -18,6 +19,7 @@
 !/docs/images/
 !/docs/architecture.md
 !/docs/development.md
+!/docs/4dgs.md
 /docs/images/*
 !/docs/images/snowpark-overview.png
 !/docs/images/boardslide-preview.gif

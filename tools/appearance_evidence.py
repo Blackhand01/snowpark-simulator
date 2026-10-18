@@ -22,11 +22,11 @@ def main():
     panel = Image.new("RGB", (1600, 870), "#f4f6f8")
     draw = ImageDraw.Draw(panel)
     for i, name in enumerate(["before", "after"]):
-        label = "PRIMA" if i == 0 else "DOPO"
+        label = "BEFORE" if i == 0 else "AFTER"
         draw.text((i * 800 + 20, 12), label, font=font, fill="#172432")
         draw.text(
             (i * 800 + 20, 44),
-            "Stessa camera, luce e impostazioni; sola rifinitura atleta",
+            "Same camera, lighting and settings; athlete refinement only",
             font=small,
             fill="#43556a",
         )
@@ -41,10 +41,10 @@ def main():
     draw = ImageDraw.Draw(panel)
     for i, (name, label) in enumerate(
         [
-            ("portrait.png", "ATLETA"),
-            ("back.png", "RETRO / SILHOUETTE"),
-            ("face.png", "CASCO / MASCHERA"),
-            ("equipment.png", "SCARPONI / ATTACCHI"),
+            ("portrait.png", "ATHLETE"),
+            ("back.png", "BACK / SILHOUETTE"),
+            ("face.png", "HELMET / GOGGLES"),
+            ("equipment.png", "BOOTS / BINDINGS"),
         ]
     ):
         x = (i % 2) * 800

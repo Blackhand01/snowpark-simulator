@@ -111,7 +111,7 @@ def main():
         marker="*",
         c="#16a34a",
         s=150,
-        label="Origine atleta, posa " + data["pose_id"],
+        label="Athlete origin, pose " + data["pose_id"],
     )
     ax.set_aspect("equal")
     ax.set_xlim(-15, 15)

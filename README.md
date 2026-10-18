@@ -1,14 +1,14 @@
 # Snowpark Simulator
 
-Genera uno snowpark 3D in Blender e immagini sintetiche con condizioni note e ripetibili. Serve a studiare acquisizione da più camere e ricostruzione **Gaussian Splatting**: una rappresentazione 3D basata su primitive gaussiane.
+Generate 3D snowpark scenes in Blender and synthetic images under known, repeatable conditions. The project supports experiments in multi-camera acquisition and **Gaussian Splatting**, a 3D representation built from Gaussian primitives.
 
-Il progetto comprende terreno innevato, rail, atleta articolato e movimento sugli sci. È una scena procedurale per esperimenti visivi: il movimento è definito dalle rotazioni delle ossa, senza una simulazione fisica calibrata.
+The scene includes snow-covered terrain, a rail, a rigged athlete, and skiing motion. It is a procedural environment for visual experiments: bone rotations define the movement, without a calibrated physics simulation.
 
-![Vista sintetica dello snowpark con atleta e rail](docs/images/snowpark-overview.png)
+![Synthetic snowpark scene with a skier and rail](docs/images/snowpark-overview.png)
 
-## Avvio rapido
+## Quick start
 
-Richiede **Python ≥ 3.11** e **Blender**. Non occorrono pacchetti Python aggiuntivi per generare l'ambiente statico.
+Requires **Python ≥ 3.11** and **Blender**. No additional Python packages are needed to generate the static environment.
 
 ```sh
 git clone https://github.com/Blackhand01/snowpark-simulator.git
@@ -16,59 +16,66 @@ cd snowpark-simulator
 python3 -B -m snowpark_simulator scene --without-reference
 ```
 
-Il comando costruisce l'ambiente statico iniziale, salva `snowpark.blend`, produce quattro render e riapre il file in un processo Blender separato per verificarlo. L'atleta e il movimento dell'immagine dimostrativa richiedono i workflow successivi.
+This command builds the initial static environment, saves `snowpark.blend`, renders four views, and reopens the file in a separate Blender process for verification. The athlete and motion shown in the demonstration images require subsequent workflows.
 
-Blender viene cercato tramite `--blender`, la variabile `SNOWPARK_BLENDER`, il `PATH`, quindi l'app macOS:
+Blender is resolved through `--blender`, the `SNOWPARK_BLENDER` environment variable, `PATH`, then the macOS application:
 
 ```sh
-python3 -B -m snowpark_simulator scene --without-reference --blender /percorso/a/blender
+python3 -B -m snowpark_simulator scene --without-reference --blender /path/to/blender
 python3 -B -m snowpark_simulator --help
 python3 -B -m snowpark_simulator motion --help
 ```
 
-Per un controllo veloce dell'installazione:
+For a quick installation check:
 
 ```sh
 python3 -B -m snowpark_simulator scene --without-reference --config configs/scene/smoke.toml
 ```
 
-Ogni costruzione crea una nuova directory `outputs/<fase>-<UTC>/`, con scena, render, configurazione congelata, sorgenti, log e verifiche. I vecchi output non vengono sovrascritti. La navigazione interattiva in Blender è una verifica distinta da quella automatica.
+Each build creates a new `outputs/<stage>-<UTC>/` directory containing the scene, renders, frozen configuration, source snapshots, logs, and verification results. Previous outputs are not overwritten. Interactive navigation in Blender is a separate check from automated verification.
 
-## Movimento dimostrativo
+## Motion preview
 
-![Anteprima del boardslide: ingresso, rotazione sul rail e uscita](docs/images/boardslide-preview.gif)
+![Boardslide preview showing entry, rotation on the rail, and exit](docs/images/boardslide-preview.gif)
 
-Anteprima Workbench con materiali semplificati, esportata a 20 fotogrammi al secondo; il movimento dura circa cinque secondi. Mostra l'articolazione e la sequenza, non la qualità di un render finale. La scena animata e i dataset non sono inclusi nel clone.
+Workbench preview with simplified materials, exported at 20 frames per second; the movement lasts approximately five seconds. It shows articulation and timing rather than final render quality. The animated scene and datasets are not included in the clone.
 
-## Comandi e configurazioni
+## Commands and configuration
 
-| Comando | Responsabilità |
+| Command | Responsibility |
 | --- | --- |
-| `scene` | Ambiente statico e verifica indipendente |
-| `terrain` | Morfologia della pista e contatto con il terreno |
-| `athlete` | Confronto neve e atleta statico riggato |
-| `appearance`, `presentation` | Abbigliamento, accessori e leggibilità della neve |
-| `motion` | Costruzione, controllo e anteprima del movimento |
-| `capture` | Immagini da camere calibrate, posa congelata e verifica |
-| `conditions` | Varianti controllate di luce, neve, foschia e occlusione |
-| `brush` | Backend opzionale di Gaussian Splatting |
+| `scene` | Static environment and independent verification |
+| `terrain` | Slope morphology and terrain contact |
+| `athlete` | Snow comparison and a static rigged athlete |
+| `appearance`, `presentation` | Clothing, equipment, and readable snow detail |
+| `motion` | Movement construction, verification, and preview |
+| `capture` | Calibrated camera views, frozen poses, and dataset verification |
+| `conditions` | Controlled lighting, snow, haze, and occlusion variants |
+| `brush` | Optional Gaussian Splatting backend |
 
-Le configurazioni sono raggruppate in `configs/scene/`, `motion/`, `capture/`, `conditions/` e `tricks/`. **Quelle avanzate contengono percorsi e hash di esecuzioni storiche**: occorre fornire gli input e aggiornare i profili prima di usarle. Il clone riproduce direttamente solo la demo statica, non l'intera catena mostrata nelle immagini.
+Configurations are grouped under `configs/scene/`, `motion/`, `capture/`, `conditions/`, and `tricks/`. **Advanced profiles contain paths and hashes from historical runs**: supply the required inputs and update the profiles before using them. A fresh clone directly reproduces only the static demo, not the complete pipeline shown in the images.
 
-## Struttura e sviluppo
+## Project layout and development
 
 ```text
-snowpark_simulator/   CLI, workflow e gestione delle esecuzioni
-scripts/             Generatori, librerie e verificatori eseguiti da Blender
-tools/               Analisi, valutazione e composizione delle evidenze
-configs/             Parametri della scena e degli esperimenti
-tests/               Test automatici senza Blender
-assets/              Texture e manifest di provenienza
-docs/                Architettura, guida di sviluppo e due anteprime
-outputs/             Risultati locali, esclusi da Git
+snowpark_simulator/   CLI, workflows, and execution management
+scripts/             Generators, libraries, and verifiers run inside Blender
+tools/               Analysis, evaluation, and evidence composition
+configs/             Scene and experiment parameters
+tests/               Automated tests without Blender
+notebooks/           Optional Colab Free research pilot
+assets/              Textures and provenance manifests
+docs/                Architecture, development guide, and two previews
+outputs/             Local results, excluded from Git
 ```
 
-[Architettura e responsabilità](docs/architecture.md) · [Sviluppo, workflow e test](docs/development.md) · [Asset e licenze](ASSET_CREDITS.md)
+[Architecture and responsibilities](docs/architecture.md) · [Development, workflows, and tests](docs/development.md) · [Assets and licenses](ASSET_CREDITS.md)
+
+For the bounded dynamic reconstruction experiment, see the
+[4DGS pilot protocol](docs/4dgs.md) and [Colab Free notebook](notebooks/4dgs_colab.ipynb).
+It requires the approved local animated scene and a separately verified synthetic
+dataset. GPU availability, successful fitting and visual quality are separate checks;
+the included research backend is not cleared for commercial use.
 
 ```sh
 python3 -B -m unittest discover -s tests -v
@@ -76,10 +83,10 @@ ruff check .
 ruff format --check .
 ```
 
-## Limiti e dipendenze opzionali
+## Limitations and optional dependencies
 
-Verificato nello sviluppo con Blender 5.2.2 LTS su macOS Apple Silicon; altre piattaforme richiedono una verifica specifica. Geometria, abiti, neve e movimento sono approssimazioni artistiche, senza calibrazione di forze, attrito o biomeccanica. Il personaggio resta visibilmente sintetico.
+Development was verified with Blender 5.2.2 LTS on macOS Apple Silicon; other platforms require separate verification. Geometry, clothing, snow, and movement are artistic approximations, without calibrated forces, friction, or biomechanics. The character remains visibly synthetic.
 
-Gli strumenti in `tools/` possono richiedere NumPy, Pillow, Matplotlib e scikit-image; video e confronto temporale richiedono FFmpeg/FFprobe. Brush v0.3.0 è opzionale, separato e non scaricato automaticamente. Nessun add-on Blender è obbligatorio.
+Tools under `tools/` may require NumPy, Pillow, Matplotlib, and scikit-image; video encoding and timing comparisons require FFmpeg/FFprobe. Brush v0.3.0 is optional, installed separately, and never downloaded automatically. No Blender add-on is required.
 
-Geometria e personaggio sono procedurali. Le texture **Snow 01**, Rob Tuytel / Poly Haven, sono CC0: [fonte e manifest](ASSET_CREDITS.md). Nessuna fotografia personale è distribuita come texture.
+Geometry and the character are procedural. **Snow 01** textures by Rob Tuytel / Poly Haven are CC0: see [sources and manifest](ASSET_CREDITS.md). No personal photograph is distributed as a texture.

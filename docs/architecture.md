@@ -1,45 +1,46 @@
-# Architettura
+# Architecture
 
-## Scopo
+## Purpose
 
-Il simulatore produce scene e immagini sintetiche ripetibili per esperimenti di acquisizione e ricostruzione 3D. Geometria procedurale, movimento cinematografico, render e valutazione sono responsabilità distinte. Un processo terminato correttamente non dimostra né accuratezza fisica né qualità della ricostruzione.
+The simulator produces repeatable scenes and synthetic images for acquisition and 3D reconstruction experiments. Procedural geometry, cinematic motion, rendering, and evaluation have separate responsibilities. Successful process completion does not establish physical accuracy or reconstruction quality.
 
-## Confini dei moduli
+## Module boundaries
 
 ```mermaid
 flowchart LR
-    User[CLI e configurazione] --> Host[snowpark_simulator/workflows]
-    Host --> Runtime[artifacts ed execution]
-    Runtime --> Blender[Processo Blender separato]
-    Blender --> Scripts[scripts: scena, materiali, rig e verifiche]
-    Scripts --> Outputs[outputs: scena, immagini e metadati]
-    Outputs --> Tools[tools: analisi e valutazione]
-    Host --> Brush[Backend Brush opzionale]
+    User[CLI and configuration] --> Host[snowpark_simulator/workflows]
+    Host --> Runtime[artifacts and execution]
+    Runtime --> Blender[Separate Blender process]
+    Blender --> Scripts[scripts: scene, materials, rig, and checks]
+    Scripts --> Outputs[outputs: scene, images, and metadata]
+    Outputs --> Tools[tools: analysis and evaluation]
+    Host --> Brush[Optional Brush backend]
 ```
 
-- **`cli.py`**: interfaccia a riga di comando (CLI), con elenco dei comandi e caricamento del solo workflow richiesto. Mostrare l'aiuto o importare il pacchetto non avvia subprocessi.
-- **`workflows/`**: un modulo per attività. Sceglie input, fasi e file di scena; non costruisce mesh né contiene operatori Blender.
-- **`artifacts.py`**: percorsi confinati nel repository, directory UTC, hash SHA-256 e copie dei sorgenti. Risolve anche i collegamenti simbolici prima dei controlli.
-- **`execution.py`**: individua Blender, costruisce liste di argomenti senza shell e conserva log non sovrascrivibili. Tutti i workflow Blender usano la stessa modalità offline, senza autoexec.
-- **`scripts/`**: codice che usa l'API di Blender e profili numerici riutilizzabili. I file `*_profile.py` e `reference_clock.py` sono matematica pura, verificabile senza Blender. `scene_support.py` raccoglie firme geometriche e impostazioni dei render.
-- **`tools/`**: comandi separati per controllo dei dati, metriche, grafici e codifica video. Non sono dipendenze della demo statica.
+- **`cli.py`**: command-line interface (CLI), listing available operations and loading only the requested workflow. Displaying help or importing the package does not start subprocesses.
+- **`workflows/`**: one module per activity. Selects inputs, stages, and scene files; does not construct meshes or contain Blender operators.
+- **`artifacts.py`**: repository-scoped paths, UTC directories, SHA-256 hashes, and source snapshots. Resolves symbolic links before checking path containment.
+- **`execution.py`**: discovers Blender, constructs argument lists without a shell, and preserves logs without overwriting them. Every Blender workflow uses the same offline mode with autoexec disabled.
+- **`scripts/`**: Blender API code and reusable numerical profiles. The `*_profile.py` files and `reference_clock.py` contain pure mathematics and can be tested without Blender. `scene_support.py` collects geometry signatures and render settings.
+- **`tools/`**: separate commands for data checks, metrics, plots, and video encoding. They are not dependencies of the static demo.
+- **`pilot4d.py` and `notebooks/`**: a neutral camera/time partition contract and an optional, isolated Colab research runner. The notebook does not become a dependency of scene generation. See the [4DGS protocol](4dgs.md) for capture, backend adaptation and held-out evaluation boundaries.
 
-## Famiglie di codice Blender
+## Blender code by responsibility
 
-| Responsabilità | Moduli principali |
+| Responsibility | Main modules |
 | --- | --- |
-| Ambiente iniziale | `build_scene.py`, `verify_scene.py` |
-| Morfologia e appoggi | `terrain_profile.py`, `terrain_geometry.py`, `refine_terrain.py`, `verify_terrain.py` |
-| Personaggio | `athlete_proxy.py`, `athlete_fit.py`, `build_athlete.py`, `verify_athlete.py` |
-| Abbigliamento e neve | `athlete_clothing.py`, `refine_appearance.py`, `compare_snow.py`, `presentation_scene.py` |
-| Movimento | `motion_profile.py`, `trick_profile.py`, `rail_slide_profile.py`, `animate_scene.py`, `rail_slide_scene.py` |
-| Sincronizzazione video | `reference_clock.py`, `retime_scene.py` |
-| Acquisizione e varianti | `capture_scene.py`, `render_conditions.py`, `verify_condition_scenes.py` |
+| Initial environment | `build_scene.py`, `verify_scene.py` |
+| Morphology and supports | `terrain_profile.py`, `terrain_geometry.py`, `refine_terrain.py`, `verify_terrain.py` |
+| Character | `athlete_proxy.py`, `athlete_fit.py`, `build_athlete.py`, `verify_athlete.py` |
+| Clothing and snow | `athlete_clothing.py`, `refine_appearance.py`, `compare_snow.py`, `presentation_scene.py` |
+| Motion | `motion_profile.py`, `trick_profile.py`, `rail_slide_profile.py`, `animate_scene.py`, `rail_slide_scene.py` |
+| Video synchronization | `reference_clock.py`, `retime_scene.py` |
+| Capture and variants | `capture_scene.py`, `capture_motion.py`, `render_conditions.py`, `verify_condition_scenes.py` |
 
-## Dati e riproducibilità
+## Data and reproducibility
 
-`configs/` contiene gli input modificabili. Ogni run ne conserva una copia locale con i sorgenti effettivi e i record di esecuzione. La copia del pacchetto host include anche i workflow: conservare soltanto il comando di ingresso non sarebbe sufficiente dopo l'estrazione delle routine comuni.
+`configs/` contains editable inputs. Each run preserves a local copy together with the actual sources and execution records. The host package snapshot includes the workflows: preserving only an entry command would be insufficient after extracting shared routines.
 
-Le fasi successive richiedono una directory di run esplicita; non selezionano implicitamente l'ultimo `.blend`. Gli hash identificano gli input previsti, non certificano la fisica. Alcuni nomi dei file generati conservano le sigle storiche P1/P2 per mantenere compatibilità con i metadati e le scene precedenti.
+Subsequent stages require an explicit run directory; they do not implicitly select the latest `.blend`. Hashes identify the expected inputs, not physical validity. Some generated filenames retain the historical P1/P2 labels for compatibility with previous metadata and scenes.
 
-La build statica, la riapertura indipendente, i test numerici e la navigazione manuale sono evidenze diverse. I test host sostituiscono Blender con un esecutore controllato solo dove verificano orchestrazione ed errori; non vengono presentati come render eseguiti.
+Static builds, independent reopening, numerical tests, and manual navigation provide different evidence. Host tests replace Blender with a controlled executor only when testing orchestration and error handling; they are not presented as completed renders.

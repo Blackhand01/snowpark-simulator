@@ -21,16 +21,16 @@ def main():
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="960" height="330" viewBox="0 0 960 330">
 <rect width="960" height="330" fill="#f6f8fa"/>
 <g font-family="Arial,sans-serif" fill="#18283b">
-<text x="30" y="30" font-size="21">Profilo longitudinale misurato sulla mesh — asse X = 0</text>
-<text x="30" y="55" font-size="14">Stessa scala orizzontale e verticale; discesa verso −Y. Rilievo artistico, non un rilievo di Melezet.</text>
+<text x="30" y="30" font-size="21">Measured longitudinal mesh profile — centerline X = 0</text>
+<text x="30" y="55" font-size="14">Equal horizontal and vertical scale; downhill toward −Y. Artistic terrain, not a Melezet survey.</text>
 <path d="M 65 80 H {endx:.2f} V {endy:.2f}" stroke="#a9b5c3" stroke-dasharray="5,5" fill="none"/>
 <polyline points="{line}" fill="none" stroke="#1667b1" stroke-width="3"/>
 <circle cx="{mid[0]:.2f}" cy="{mid[1]:.2f}" r="5" fill="#dc6f15"/>
-<text x="{mid[0] + 9:.2f}" y="{mid[1] - 10:.2f}" font-size="14">Rail; settore ≈17,2%</text>
-<text x="330" y="102" font-size="15">Proiezione orizzontale: {m["horizontal_length_m"]:.2f} m</text>
-<text x="{endx - 100:.2f}" y="{endy - 45:.2f}" font-size="15">Dislivello: {m["drop_m"]:.2f} m</text>
-<text x="30" y="275" font-size="17">Percorso: {m["surface_length_m"]:.2f} m · media {m["average_grade_percent"]:.2f}% / {m["average_angle_degrees"]:.2f}°</text>
-<text x="30" y="302" font-size="15">Pendenze locali: {m["min_local_grade_percent"]:.2f}–{m["max_local_grade_percent"]:.2f}% · contropendenze rilevate: 0 / {m["measured_segments"]}</text>
+<text x="{mid[0] + 9:.2f}" y="{mid[1] - 10:.2f}" font-size="14">Rail sector ≈17.2%</text>
+<text x="330" y="102" font-size="15">Horizontal projection: {m["horizontal_length_m"]:.2f} m</text>
+<text x="{endx - 100:.2f}" y="{endy - 45:.2f}" font-size="15">Elevation drop: {m["drop_m"]:.2f} m</text>
+<text x="30" y="275" font-size="17">Surface length: {m["surface_length_m"]:.2f} m · average {m["average_grade_percent"]:.2f}% / {m["average_angle_degrees"]:.2f}°</text>
+<text x="30" y="302" font-size="15">Local slopes: {m["min_local_grade_percent"]:.2f}–{m["max_local_grade_percent"]:.2f}% · reverse-slope segments: 0 / {m["measured_segments"]}</text>
 </g></svg>'''
     (out / "slope-profile.svg").write_text(svg)
     try:

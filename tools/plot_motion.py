@@ -35,7 +35,7 @@ def main():
         ax.set_ylabel(label)
         ax.legend(loc="upper right", ncol=2)
         ax.grid(alpha=0.2)
-    axs[2].set_xlabel("Tempo [s]")
+    axs[2].set_xlabel("Time [s]")
     fig.suptitle("Salto cinematico — non simulazione fisica")
     fig.tight_layout()
     for ext in ["png", "svg"]:

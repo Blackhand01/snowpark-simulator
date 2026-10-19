@@ -56,6 +56,12 @@ confirmed orbit, zoom and pan while paused; isolated player-memory measurement
 remains incomplete. See
 [local playback, controls and restart instructions](docs/4dgs.md#optional-local-viewer-chronosplat).
 
+The same frozen checkpoint has also been exported into **121 frames over the
+same second**, spaced 8.33 ms apart, without training. All 31 original states
+are retained byte identically. This adds estimated intermediate poses, not new
+observations or improved reconstruction quality. See the
+[dense export and playback-speed explanation](docs/4dgs.md#dense-export-121-frames-without-training).
+
 **Next training requirement, not started:** reconstruct the complete animated
 scene over **0–5.02 seconds**, including approach, rail interaction, landing and
 run-out, with the surrounding snowpark visible. This requires a new full-duration

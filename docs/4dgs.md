@@ -279,6 +279,52 @@ compression, not athlete reconstruction quality. Reports retain source hashes,
 commands, screenshots and OS memory samples. Historical output directories remain
 unchanged.
 
+## Dense export: 121 frames without training
+
+On 18 October 2026 the evaluated dynamic checkpoint was reopened on **Colab Free
+CPU**, using its pinned deformation network, and evaluated at 121 endpoint-inclusive
+times over scene time **0.9–1.9 s**. The interval is 8.333 ms. No new capture,
+training, optimizer, backward pass or paid resource was used. The 90 additional
+states are model estimates; the failed reconstruction quality remains unchanged.
+
+All 31 original times passed a CPU-versus-original-CUDA Gaussian-attribute check
+(maximum absolute difference 9.54e-7). Their PLYs were then copied byte identically
+into every fourth new output slot. The original export and all four evaluated
+model-file hashes remain unchanged. This is an attribute comparison, not a new
+CUDA render-parity test. The export loop took 12.04 s; the subprocess took 14.07 s.
+All 121 downloaded file hashes and the archive CRC passed. Raw PLYs total 525.5 MB.
+
+Exporter: [`tools/resample_4dgs.py`](../tools/resample_4dgs.py). Reproducible inputs,
+the recovered result and current viewer evidence are retained locally in
+`outputs/4dgs-121-20261018T153250-993896Z/REPORT.md`. The original 31-frame exporter
+keeps its historical contract. The new exporter requires PyTorch, NumPy and
+`plyfile`; these are not dependencies of the static Blender workflow.
+
+Chronosplat loaded the actual 121-frame sequence. Paused keyboard seeking reached
+frames **39 and 40**, corresponding to scene times **1.216667 and 1.225 s**, which
+bracket the configured rotation-start marker at 1.218333 s. That marker describes
+the source animation; it is not a measured onset in the imperfect reconstruction.
+Native UI evidence is authoritative where browser DOM snapshots lag the canvas.
+The completed SOG derivative contains all 121 frames (86.6 MB versus 525.5 MB
+raw). Its hashes, ZIP CRC, 17,507 Gaussians/frame and degree-3 color passed checks.
+The final player cached 121/121 frames with zero failures. Visible stats showed
+approximately **60–60.1 effective fps** at a 120-fps target, with no buffering stalls
+in those samples: every-frame playback therefore takes about two seconds for the
+one-second action. Paused stepping 39 → 40 → 39 and the settled final pause were
+verified. No isolated memory measurement or sustained 120-fps pass is claimed.
+SOG is lossy; raw masters are retained. The report includes the final localhost
+URL, screenshot and `start-player.command` for restarting the viewer.
+
+The FPS field controls requested **playback speed**, not the number of saved
+frames. All 121 files remain available at every setting. With every-frame mode,
+120 fps requests approximately one second of playback; 60 fps requests two
+seconds; 30 fps requests four seconds. If decoding/rendering is slower, playback
+takes longer while preserving the frame order. The player holds the final endpoint
+for another frame interval, so its nominal 120-fps loop reads 1.00833 s.
+"Buffering 2/3" means two of three requested consecutive frames are ready before
+starting; the supported `prebuffer=0` option removes this initial wait, without
+removing any saved frames or guaranteeing stall-free playback.
+
 ## Next training requirement: complete 5.02-second action
 
 **Requested on 18 October 2026; not captured or trained yet.** The next experiment

@@ -1,28 +1,17 @@
-# Only source, documented configurations and selected public assets enter Git.
-/*
-!/.gitignore
-!/README.md
-!/ASSET_CREDITS.md
-!/pyproject.toml
-!/snowpark_simulator/
-!/scripts/
-!/tools/
-!/configs/
-!/tests/
-!/notebooks/
-!/.github/
-!/assets/
-!/docs/
+# Source, configurations, notebooks, design dossiers, prompts and compact
+# reports are versionable by default. Exclude local work by purpose below.
+/outputs/
+/.local/
+/references/
+/.tools/
+/target/
 
-# Keep private references and chronological experiment reports local.
-/docs/*
-!/docs/images/
-!/docs/architecture.md
-!/docs/development.md
-!/docs/4dgs.md
-/docs/images/*
-!/docs/images/snowpark-overview.png
-!/docs/images/boardslide-preview.gif
+# Local preservation inventories duplicate the working-tree state. Keep design
+# documents, review summaries, source references and validation results in Git.
+/docs/**/preservation-before.json
+/docs/**/preservation-review.json
+/docs/**/concurrent-player-snapshot.json
+/docs/**/revisions/*/before.json
 
 # Local runs, environments, secrets and generated binaries.
 **/__pycache__/
@@ -32,6 +21,9 @@
 .env
 .env.*
 !.env.example
+.envrc
+credentials.json
+token.json
 *.pem
 *.key
 *.p12
@@ -41,8 +33,41 @@ venv/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+.cache/
+.ipynb_checkpoints/
+node_modules/
+build/
+dist/
+*.egg-info/
 **/target/
 **/.tools/
 *.blend
-*.blend[0-9]
+*.blend[0-9]*
 *.log
+
+# Downloaded archives, model weights and generated reconstruction data.
+# Curated documentation images and redistributable textures remain versionable.
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.ply
+*.splat
+*.npy
+*.npz
+*.exr
+*.mp4
+*.mov
+*.avi
+*.so
+*.dylib
+*.o
+*.a
+*.whl
+events.out.tfevents.*
+wandb/

@@ -1,0 +1,126 @@
+{
+  "at_utc": "2026-10-18T14:07:43.415031+00:00",
+  "current_repository": "/Users/stefanoroybisignano/Desktop/GaussianSplatting/synthetic-scene-simulator",
+  "markdown_files": 20,
+  "prompt_files": 9,
+  "local_links_checked": 109,
+  "mermaid_blocks": 5,
+  "errors": [],
+  "scope": "Documentation-only Markdown local-link existence, fence balance, JSON syntax, required prompt fields, backup hashes and 94 protected resident-file hashes; manual sequential-protocol review. No application tests or experiments. Mermaid source reviewed, not rendered.",
+  "protected_files_checked": 94,
+  "protected_files_changed": [],
+  "git_status_unchanged": true,
+  "backup_document_hashes_checked": 23,
+  "manual_review": [
+    "All-stage ledger and single-factor boundary",
+    "Immutable B0 and explicit accepted-parent comparisons",
+    "No automatic acceptance, agents or next phase",
+    "Development review isolated from final test",
+    "Matched ordinary control and total-cost comparison",
+    "Full-duration scope distinct from original pilot",
+    "Phase-specific ownership, budgets and preservation",
+    "No new literature performance claims"
+  ],
+  "files": {
+    "04-budgets-and-experiments.md": {
+      "lines": 144,
+      "words": 3549,
+      "mermaid_blocks": 0
+    },
+    "local-paper-inventory.md": {
+      "lines": 59,
+      "words": 1080,
+      "mermaid_blocks": 0
+    },
+    "02-literature-and-codesign.md": {
+      "lines": 108,
+      "words": 2649,
+      "mermaid_blocks": 0
+    },
+    "05-agent-prompts.md": {
+      "lines": 67,
+      "words": 1004,
+      "mermaid_blocks": 1
+    },
+    "06-sequential-optimization.md": {
+      "lines": 112,
+      "words": 2129,
+      "mermaid_blocks": 1
+    },
+    "03-architecture-and-contracts.md": {
+      "lines": 192,
+      "words": 3614,
+      "mermaid_blocks": 2
+    },
+    "README.md": {
+      "lines": 66,
+      "words": 1151,
+      "mermaid_blocks": 0
+    },
+    "01-baseline-audit.md": {
+      "lines": 156,
+      "words": 2590,
+      "mermaid_blocks": 1
+    },
+    "preservation-review.md": {
+      "lines": 33,
+      "words": 476,
+      "mermaid_blocks": 0
+    },
+    "prompts/08.md": {
+      "lines": 35,
+      "words": 946,
+      "mermaid_blocks": 0
+    },
+    "prompts/09.md": {
+      "lines": 35,
+      "words": 951,
+      "mermaid_blocks": 0
+    },
+    "prompts/06.md": {
+      "lines": 35,
+      "words": 1017,
+      "mermaid_blocks": 0
+    },
+    "prompts/02.md": {
+      "lines": 35,
+      "words": 870,
+      "mermaid_blocks": 0
+    },
+    "prompts/03.md": {
+      "lines": 35,
+      "words": 935,
+      "mermaid_blocks": 0
+    },
+    "prompts/07.md": {
+      "lines": 35,
+      "words": 989,
+      "mermaid_blocks": 0
+    },
+    "prompts/04.md": {
+      "lines": 35,
+      "words": 959,
+      "mermaid_blocks": 0
+    },
+    "prompts/05.md": {
+      "lines": 35,
+      "words": 899,
+      "mermaid_blocks": 0
+    },
+    "prompts/01.md": {
+      "lines": 35,
+      "words": 892,
+      "mermaid_blocks": 0
+    },
+    "templates/experiment-card.md": {
+      "lines": 82,
+      "words": 1054,
+      "mermaid_blocks": 0
+    },
+    "revisions/2026-10-18-sequential/README.md": {
+      "lines": 22,
+      "words": 345,
+      "mermaid_blocks": 0
+    }
+  }
+}

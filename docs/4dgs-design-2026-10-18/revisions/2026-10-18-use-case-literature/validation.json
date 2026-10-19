@@ -1,0 +1,18 @@
+{
+  "at_utc": "2026-10-18T14:15:00.127825+00:00",
+  "revision": "use-case-literature",
+  "markdown_files": 22,
+  "prompt_files": 9,
+  "local_links_checked": 119,
+  "errors": [],
+  "protected_files_checked": 94,
+  "protected_files_changed": [],
+  "git_status_unchanged": true,
+  "scope": "Markdown links/fences, JSON, prompt selection/comparison gates, backup and protected-file hashes. No application tests or experiments; no Mermaid rendering.",
+  "literature_limits": [
+    "DSD-GS local PDF read timed out; primary HTML used",
+    "Official project labels code TBA",
+    "DepthSplat license/weights and complete integration unverified",
+    "Other phase candidates inherit prior cards, not fresh exhaustive audits"
+  ]
+}
